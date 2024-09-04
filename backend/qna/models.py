@@ -38,6 +38,8 @@ class Answer(models.Model):
 class Paper(models.Model):
     title = models.CharField(max_length=1000)
     description = models.TextField(null=True)
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL)
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:
         return self.title
@@ -56,3 +58,6 @@ class QuestionAssignment(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     assignee = models.ForeignKey(AuthUser, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"question:{self.question} assignee:{self.assignee}"
