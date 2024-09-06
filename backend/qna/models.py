@@ -22,7 +22,7 @@ class Question(models.Model):
     difficulty_level = models.IntegerField(
         choices=DifficultyLevels, default=DifficultyLevels.EASY
     )
-    tags = models.ManyToManyField(Tag, through=QuestionTag)
+    tags = models.ManyToManyField(Tag, through="QuestionTag")
     explanation = models.TextField()
 
     def __str__(self) -> str:
@@ -51,7 +51,7 @@ class Answer(models.Model):
 class Paper(models.Model):
     title = models.CharField(max_length=1000)
     description = models.TextField(null=True)
-    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL)
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:

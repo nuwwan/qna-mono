@@ -22,5 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("authentication.urls")),
     path("user/", include("user.urls")),
-    path("qna/", include("user.qna")),
+    path("qna/", include("qna.urls")),
 ]

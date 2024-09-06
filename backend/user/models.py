@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 
 
 class Gender(models.TextChoices):
-    FINANCE = "fin", "Finance"
-    EDUCATION = "edu", "Education"
+    MALE = "male", "Male"
+    FEMALE = "female", "Female"
 
 
 class Education(models.TextChoices):
@@ -14,20 +14,6 @@ class Education(models.TextChoices):
 
 
 AuthUser = get_user_model()
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
-    birth_day = models.DateField(null=True)
-    gender = models.CharField(max_length=10, choices=Gender.choices)
-    country = models.CharField(max_length=25)
-    educational_level = models.CharField(max_length=10, default=Education.NONE)
-    tags = models.ManyToManyField(Tag)
-    subjects = models.ManyToManyField(Subject)
-    topics = models.ManyToManyField(Topic)
-
-    def __str__(self) -> str:
-        return self.user.first_name
 
 
 class Tag(models.Model):
@@ -55,3 +41,17 @@ class Topic(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
+    birth_day = models.DateField(null=True)
+    gender = models.CharField(max_length=10, choices=Gender.choices)
+    country = models.CharField(max_length=25)
+    educational_level = models.CharField(max_length=10, default=Education.NONE)
+    tags = models.ManyToManyField(Tag)
+    subjects = models.ManyToManyField(Subject)
+    topics = models.ManyToManyField(Topic)
+
+    def __str__(self) -> str:
+        return self.user.first_name
