@@ -14,6 +14,10 @@ class Question(models.Model):
         AuthUser, on_delete=models.CASCADE, related_name="questions"
     )
     tags = models.ManyToManyField(Tag, through=QuestionTag)
+    explanation = models.TextField()
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class QuestionTag(models.Model):

@@ -1,5 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework import status
+
+"""
+Profile Views
+"""
 
 
 class CreateProfile:
