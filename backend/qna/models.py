@@ -6,12 +6,21 @@ from user.models import Tag, Subject
 AuthUser = get_user_model()
 
 
+class DifficultyLevels(models.IntegerChoices):
+    EASY = 1, "Easy"
+    MEDIUM = 2, "Medium"
+    HARD = 3, "Hard"
+
+
 class Question(models.Model):
     title = models.TextField(null=False)
     image = models.CharField(max_length=1000, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         AuthUser, on_delete=models.CASCADE, related_name="questions"
+    )
+    difficulty_level = models.IntegerField(
+        choices=DifficultyLevels, default=DifficultyLevels.EASY
     )
     tags = models.ManyToManyField(Tag, through=QuestionTag)
     explanation = models.TextField()
@@ -58,7 +67,7 @@ class PaperQuestion(models.Model):
         return f"paper:{self.paper} - question:{self.question}"
 
 
-class QuestionAssignment(models.Model):
+class QuestionAttempt(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     assignee = models.ForeignKey(AuthUser, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
