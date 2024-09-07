@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -10,6 +10,11 @@ from rest_framework import status
 from authentication.utils import generate_jwt_token
 
 from .models import Profile, Tag, Topic, Subject, Gender, Education
+
+"""
+To run tests
+python manage.py test user.tests.BaseProfileTest
+"""
 
 AuthUser = get_user_model()
 
@@ -32,7 +37,7 @@ class BaseProfileTest(APITestCase):
         # create topics
         topic = Topic.objects.create(title="test_topic", subject=subject)
 
-        birth_date = make_aware(datetime(2000, 1, 1, 0, 0))
+        birth_date = date(2000, 1, 1)
 
         sample_profile_payload = {
             "birth_day": birth_date.isoformat(),
