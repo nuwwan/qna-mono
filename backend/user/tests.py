@@ -65,3 +65,12 @@ class CreateProfileTest(BaseProfileTest):
         response = self.client.post(self.url, self.profile, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_with_no_subject(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.post(
+            self.url, {**self.profile, "subjects": []}, format="json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

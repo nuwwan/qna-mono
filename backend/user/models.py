@@ -49,7 +49,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=10, choices=Gender.choices)
     country = models.CharField(max_length=25)
     educational_level = models.CharField(max_length=10, default=Education.NONE)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, null=True)
     subjects = models.ManyToManyField(Subject)
     topics = models.ManyToManyField(Topic)
 
