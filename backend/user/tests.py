@@ -74,3 +74,47 @@ class CreateProfileTest(BaseProfileTest):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class GetProfileTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("get_profile_detail")
+        super().__init__(methodName)
+
+    def test_create_profile(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create a profile
+        profile = Profile.objects.create(
+            user=self.user,
+            birth_day=self.profile.get("birth_day"),
+            gender=self.profile.get("gender"),
+            country=self.profile.get("country"),
+            educational_level=self.profile.get("educational_level"),
+        )
+        profile.tags.set(
+            self.profile.get("tags"),
+        )
+
+        profile.subjects.set(
+            self.profile.get("subjects"),
+        )
+
+        profile.subjects.set(
+            self.profile.get("topics"),
+        )
+
+        # get profile object
+        response = self.client.get(self.url, format="json")
+
+        # assert
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_user_has_no_profile(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # get profile object
+        response = self.client.get(self.url, format="json")
+
+        # assert
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

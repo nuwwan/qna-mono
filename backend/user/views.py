@@ -22,6 +22,22 @@ class CreateProfile(generics.CreateAPIView):
         return serializer.save(user=self.request.user)
 
 
+class GetProfileDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            profile = Profile.objects.get(user=user)
+            serializer = ProfileSerializer(profile)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as ex:
+            return Response(
+                data={"message": "No profile is associated with this user!"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
