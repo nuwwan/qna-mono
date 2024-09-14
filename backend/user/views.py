@@ -51,8 +51,35 @@ class GetSubjects(generics.ListAPIView):
         return Subject.objects.filter(title__startswith=prefix)[:8]
 
 
-class RemoveSubject:
-    pass
+class CreateSubject(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        title = request.data.get("title")
+
+        if not title or len(title) < 2:
+            return Response(
+                {
+                    "error": "Title is required and length should be two or more characters"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Try to get the subject, or create it if it doesn't exist
+        subject, created = Subject.objects.get_or_create(title=title)
+
+        serializer = SubjectSerializer(subject)
+
+        if created:
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK,
+            )
 
 
 #

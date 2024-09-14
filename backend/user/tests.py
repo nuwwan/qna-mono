@@ -260,3 +260,35 @@ class GetSubjectTest(BaseProfileTest):
         response = self.client.get(self.url, {"title": ""})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class CreateSubjectTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("create_subject")
+        super().__init__(methodName)
+
+    def test_get_subjects(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.post(self.url, {"title": "test"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data.get("title"), "test")
+
+    def test_short_title(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.post(self.url, {"title": "t"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_existing_subject(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create a subject
+        subject = Subject.objects.create(title="test")
+
+        response = self.client.post(self.url, {"title": "test"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), subject.id)

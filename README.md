@@ -41,3 +41,4 @@ coverage html
 |               | get profile      | user/profile_detail/   | GET        |                                             |
 |               | Update Profile   | user/profile_detail/   | PUT/PATCH  | `{"birth_day": "1993-04-23","gender": "male","country": "Sri Lanka","educational_level": "school","tags": [1],"subjects": [],"topics": [1]}`|
 | Subject       | get subjects     | user/get_subjects/     | GET        | `title=something`                           |
+|               | create subject   | user/create_subject/   | POST       | `{"title":"Test"}`                          |
