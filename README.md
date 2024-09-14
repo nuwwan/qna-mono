@@ -1,0 +1,42 @@
+# Mentor App Backend
+
+## How to Setup
+
+## Test
+1. Run all tests.
+```
+coverage run manage.py test
+```
+
+2. Run a specefic Tests File.
+```
+python manage.py test myapp.tests.test_views
+```
+
+3. Run a Specific Tests class
+```
+python manage.py test path.to.your.test_module.TestClassName
+```
+
+For example, if you want to run a specific test class named MyViewTest in myapp/tests/test_views.py, you can run:
+```
+python manage.py test myapp.tests.test_views.MyViewTest
+```
+
+4. Get the Tests coverage Report.
+```
+coverage report
+```
+
+5. Get the TestS Coverage in HTML
+```
+coverage html
+```
+
+## API Document
+
+| App           | Description      | Endpoint               | Method     | Payload                                     |
+|---------------|------------------|------------------------|------------|---------------------------------------------|
+| Profile       |create profile    | user/create_profile/   | POST       | `{"birth_day": "1993-04-23","gender": "male","country": "Sri Lanka","educational_level": "school","tags": [1],"subjects": [],"topics": [1]}`|
+|               | get profile      | user/profile_detail/   | GET        |                                             |
+|               | Update Profile   | user/profile_detail/   | PUT/PATCH  | `{"birth_day": "1993-04-23","gender": "male","country": "Sri Lanka","educational_level": "school","tags": [1],"subjects": [],"topics": [1]}`|
