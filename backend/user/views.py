@@ -65,6 +65,8 @@ class CreateSubject(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        title = title.lower()
+
         # Try to get the subject, or create it if it doesn't exist
         subject, created = Subject.objects.get_or_create(title=title)
 

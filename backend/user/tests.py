@@ -292,3 +292,13 @@ class CreateSubjectTest(BaseProfileTest):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), subject.id)
+
+    def test_case_convert(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        title = "Test"
+
+        response = self.client.post(self.url, {"title": title}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data.get("title"), title.lower())
