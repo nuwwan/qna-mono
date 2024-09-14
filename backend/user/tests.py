@@ -344,3 +344,64 @@ class CreateTagTest(BaseProfileTest):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get("title"), title.strip())
+
+
+class GetTagsTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("get_tags")
+        super().__init__(methodName)
+
+    def test_get_tags(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # Create some subjects
+        Tag.objects.bulk_create(
+            [
+                Tag(title="test1"),
+                Tag(title="test2"),
+                Tag(title="test3"),
+                Tag(title="test4"),
+                Tag(title="test5"),
+                Tag(title="test6"),
+                Tag(title="test7"),
+                Tag(title="test8"),
+                Tag(title="test9"),
+                Tag(title="test10"),
+            ]
+        )
+
+        response = self.client.get(self.url, {"title": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 8)
+
+    def test_when_no_objects(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.get(self.url, {"title": "tag"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+    def test_short_prefix(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # Create some subjects
+        Tag.objects.bulk_create(
+            [
+                Tag(title="test1"),
+                Tag(title="test2"),
+                Tag(title="test3"),
+                Tag(title="test4"),
+                Tag(title="test5"),
+                Tag(title="test6"),
+                Tag(title="test7"),
+                Tag(title="test8"),
+                Tag(title="test9"),
+                Tag(title="test10"),
+            ]
+        )
+
+        response = self.client.get(self.url, {"title": ""})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

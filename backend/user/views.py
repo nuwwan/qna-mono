@@ -11,6 +11,7 @@ from .serializers import (
     SubjectSerializer,
     SubjectFilterSerializer,
     TagSerializer,
+    TagFilterSerializer,
 )
 
 
@@ -128,8 +129,18 @@ class RemoveTag:
     pass
 
 
-class GetTags:
-    pass
+class GetTags(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = TagSerializer
+
+    def get_queryset(self):
+        # Validate the query parameters
+        filter_serializer = TagFilterSerializer(data=self.request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        prefix = self.request.query_params.get("title")
+        return Tag.objects.filter(title__startswith=prefix)[:8]
 
 
 #

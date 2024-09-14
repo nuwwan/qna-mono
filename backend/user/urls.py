@@ -6,6 +6,7 @@ from .views import (
     GetSubjects,
     CreateSubject,
     CreateTag,
+    GetTags,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("get_subjects/", GetSubjects.as_view(), name="get_subjects"),
     path("create_subject/", CreateSubject.as_view(), name="create_subject"),
     path("create_tag/", CreateTag.as_view(), name="create_tag"),
+    path("get_tags/", GetTags.as_view(), name="get_tags"),
 ]
