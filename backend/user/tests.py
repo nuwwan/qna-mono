@@ -78,7 +78,7 @@ class CreateProfileTest(BaseProfileTest):
 
 class GetProfileTest(BaseProfileTest):
     def __init__(self, methodName: str = "runTest") -> None:
-        self.url = reverse("get_profile_detail")
+        self.url = reverse("profile_detail")
         super().__init__(methodName)
 
     def test_create_profile(self):
@@ -117,4 +117,85 @@ class GetProfileTest(BaseProfileTest):
         response = self.client.get(self.url, format="json")
 
         # assert
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class UpdateProfileTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("profile_detail")
+        super().__init__(methodName)
+
+    def test_update_profile(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create a profile
+        profile = Profile.objects.create(
+            user=self.user,
+            birth_day=self.profile.get("birth_day"),
+            gender=self.profile.get("gender"),
+            country=self.profile.get("country"),
+            educational_level=self.profile.get("educational_level"),
+        )
+        profile.tags.set(
+            self.profile.get("tags"),
+        )
+
+        profile.subjects.set(
+            self.profile.get("subjects"),
+        )
+
+        profile.subjects.set(
+            self.profile.get("topics"),
+        )
+
+        new_country = "India"
+
+        new_data = {**self.profile, "country": new_country}
+        # get profile object
+        response = self.client.put(self.url, new_data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("country"), new_country)
+
+    def test_patch_profile(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create a profile
+        profile = Profile.objects.create(
+            user=self.user,
+            birth_day=self.profile.get("birth_day"),
+            gender=self.profile.get("gender"),
+            country=self.profile.get("country"),
+            educational_level=self.profile.get("educational_level"),
+        )
+        profile.tags.set(
+            self.profile.get("tags"),
+        )
+
+        profile.subjects.set(
+            self.profile.get("subjects"),
+        )
+
+        profile.subjects.set(
+            self.profile.get("topics"),
+        )
+
+        new_country = "India"
+
+        new_data = {"country": new_country}
+        # get profile object
+        response = self.client.patch(self.url, new_data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("country"), new_country)
+
+    def test_update_profile_when_no_record_exists(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        new_country = "India"
+
+        new_data = {"country": new_country}
+        # get profile object
+        response = self.client.patch(self.url, new_data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
