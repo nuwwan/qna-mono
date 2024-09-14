@@ -16,4 +16,14 @@ class SubjectSerializer(ModelSerializer):
 
 
 class SubjectFilterSerializer(Serializer):
-    prefix = CharField(required=True, max_length=10, min_length=2)
+    title = CharField(required=True, max_length=10, min_length=2)
+
+
+class TagSerializer(ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
+
+class TagFilterSerializer(Serializer):
+    title = CharField(required=True, max_length=10, min_length=2)

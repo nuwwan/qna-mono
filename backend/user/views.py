@@ -6,7 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
 from .models import Profile, Subject, Tag, Topic
-from .serializers import ProfileSerializer, SubjectSerializer, SubjectFilterSerializer
+from .serializers import (
+    ProfileSerializer,
+    SubjectSerializer,
+    SubjectFilterSerializer,
+    TagSerializer,
+)
 
 
 #
@@ -65,8 +70,6 @@ class CreateSubject(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        title = title.lower()
-
         # Try to get the subject, or create it if it doesn't exist
         subject, created = Subject.objects.get_or_create(title=title)
 
@@ -87,8 +90,38 @@ class CreateSubject(APIView):
 #
 # Tag Views
 #
-class CreateTag:
-    pass
+class CreateTag(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        title = request.data.get("title")
+
+        if not title or len(title) < 2:
+            return Response(
+                {
+                    "error": "Title is required and length should be two or more characters"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        # format the input
+        title = title.lower()
+        title = title.strip()
+
+        # Try to get the subject, or create it if it doesn't exist
+        subject, created = Tag.objects.get_or_create(title=title)
+
+        serializer = TagSerializer(subject)
+
+        if created:
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK,
+            )
 
 
 class RemoveTag:

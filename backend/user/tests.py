@@ -267,7 +267,7 @@ class CreateSubjectTest(BaseProfileTest):
         self.url = reverse("create_subject")
         super().__init__(methodName)
 
-    def test_get_subjects(self):
+    def test_create_subjects(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
 
         response = self.client.post(self.url, {"title": "test"}, format="json")
@@ -293,12 +293,54 @@ class CreateSubjectTest(BaseProfileTest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("id"), subject.id)
 
+
+class CreateTagTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("create_tag")
+        super().__init__(methodName)
+
+    def test_create_tag(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.post(self.url, {"title": "tag"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data.get("title"), "tag")
+
+    def test_short_title(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.post(self.url, {"title": "t"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_existing_tag(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create a subject
+        tag = Tag.objects.create(title="tag")
+
+        response = self.client.post(self.url, {"title": "tag"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("id"), tag.id)
+
     def test_case_convert(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
 
-        title = "Test"
+        title = "Tag"
 
         response = self.client.post(self.url, {"title": title}, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get("title"), title.lower())
+
+    def test_tag_with_spaces(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        title = "test tag"
+
+        response = self.client.post(self.url, {"title": title}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data.get("title"), title.strip())
