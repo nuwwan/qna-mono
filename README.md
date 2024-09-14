@@ -43,3 +43,4 @@ coverage html
 | Subject       | get subjects     | user/get_subjects/     | GET        | `title=something`                           |
 |               | create subject   | user/create_subject/   | POST       | `{"title":"Test"}`                          |
 | Tag           | create tag       | user/create_tag/       | POST       | `{"title": "title"}`                        |
+|               | get tags         | user/get_tags/         | GET        | `title=something`                           |
