@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
-from .models import Profile
-from .serializers import ProfileSerializer
+from .models import Profile, Subject, Tag, Topic
+from .serializers import ProfileSerializer, SubjectSerializer, SubjectFilterSerializer
 
 
 #
@@ -34,28 +34,30 @@ class RetieveUpdateProfile(generics.RetrieveUpdateAPIView):
             raise PermissionDenied("Profile Not Found")
 
 
-"""
-Subject Views
-"""
+#
+# Subject Views
+#
+class GetSubjects(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
 
+    serializer_class = SubjectSerializer
 
-class CreateSubject:
-    pass
+    def get_queryset(self):
+        # Validate the query parameters
+        filter_serializer = SubjectFilterSerializer(data=self.request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        prefix = self.request.query_params.get("title")
+        return Subject.objects.filter(title__startswith=prefix)[:8]
 
 
 class RemoveSubject:
     pass
 
 
-class GetSubjects:
-    pass
-
-
-"""
-Tag Views
-"""
-
-
+#
+# Tag Views
+#
 class CreateTag:
     pass
 
@@ -66,3 +68,8 @@ class RemoveTag:
 
 class GetTags:
     pass
+
+
+#
+# Topic Views
+#

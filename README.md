@@ -33,10 +33,11 @@ coverage report
 coverage html
 ```
 
-## API Document
+## API Documentation
 
-| App           | Description      | Endpoint               | Method     | Payload                                     |
+| App           | Description      | Endpoint               | Method     | Payload/ Params                             |
 |---------------|------------------|------------------------|------------|---------------------------------------------|
 | Profile       |create profile    | user/create_profile/   | POST       | `{"birth_day": "1993-04-23","gender": "male","country": "Sri Lanka","educational_level": "school","tags": [1],"subjects": [],"topics": [1]}`|
 |               | get profile      | user/profile_detail/   | GET        |                                             |
 |               | Update Profile   | user/profile_detail/   | PUT/PATCH  | `{"birth_day": "1993-04-23","gender": "male","country": "Sri Lanka","educational_level": "school","tags": [1],"subjects": [],"topics": [1]}`|
+| Subject       | get subjects     | user/get_subjects/     | GET        | `title=something`                           |

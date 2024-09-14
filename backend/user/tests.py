@@ -199,3 +199,64 @@ class UpdateProfileTest(BaseProfileTest):
         response = self.client.patch(self.url, new_data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class GetSubjectTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("get_subjects")
+        super().__init__(methodName)
+
+    def test_get_subjects(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # Create some subjects
+        Subject.objects.bulk_create(
+            [
+                Subject(title="test1"),
+                Subject(title="test2"),
+                Subject(title="test3"),
+                Subject(title="test4"),
+                Subject(title="test5"),
+                Subject(title="test6"),
+                Subject(title="test7"),
+                Subject(title="test8"),
+                Subject(title="test9"),
+                Subject(title="test10"),
+            ]
+        )
+
+        response = self.client.get(self.url, {"title": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 8)
+
+    def test_when_no_objects(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.get(self.url, {"title": "sama"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+    def test_short_prefix(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # Create some subjects
+        Subject.objects.bulk_create(
+            [
+                Subject(title="test1"),
+                Subject(title="test2"),
+                Subject(title="test3"),
+                Subject(title="test4"),
+                Subject(title="test5"),
+                Subject(title="test6"),
+                Subject(title="test7"),
+                Subject(title="test8"),
+                Subject(title="test9"),
+                Subject(title="test10"),
+            ]
+        )
+
+        response = self.client.get(self.url, {"title": ""})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
