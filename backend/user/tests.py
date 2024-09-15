@@ -407,7 +407,7 @@ class GetTagsTest(BaseProfileTest):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class CreateTopic(BaseProfileTest):
+class CreateTopicsTest(BaseProfileTest):
     def __init__(self, methodName: str = "runTest") -> None:
         self.url = reverse("create_topic")
         super().__init__(methodName)
@@ -455,3 +455,48 @@ class CreateTopic(BaseProfileTest):
         response = self.client.post(self.url, payload, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class GetTopicsTest(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("get_topics")
+        super().__init__(methodName)
+
+    def test_get_topic(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create subject
+        subject = Subject.objects.create(title="Science")
+
+        # create topics
+        Topic.objects.bulk_create(
+            [
+                Topic(title="Topic 1", subject=subject),
+                Topic(title="Topic 2", subject=subject),
+                Topic(title="Topic 3", subject=subject),
+                Topic(title="Topic 4", subject=subject),
+                Topic(title="Topic 5", subject=subject),
+                Topic(title="Topic 6", subject=subject),
+                Topic(title="Topic 7", subject=subject),
+                Topic(title="Topic 8", subject=subject),
+                Topic(title="Topic 9", subject=subject),
+                Topic(title="Topic 10", subject=subject),
+            ]
+        )
+
+        response = self.client.get(self.url, {"title": "Topic", "subject": subject.id})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 8)
+
+    def test_get_topic_for_non_exist_subject(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        non_exist_subject_id = 999
+
+        response = self.client.get(
+            self.url, {"title": "Topic", "subject": non_exist_subject_id}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)

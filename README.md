@@ -45,3 +45,4 @@ coverage html
 | Tag           | create tag       | user/create_tag/       | POST       | `{"title": "title"}`                        |
 |               | get tags         | user/get_tags/         | GET        | `title=something`                           |
 | Topic         | create topic     | user/create_topic/     | POST       | `{"title":"Geography","Subject":1}`         |
+|               | get topics       | user/get_topics/       | GET        | `title=something&subject=1`                 |

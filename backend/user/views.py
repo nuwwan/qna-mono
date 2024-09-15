@@ -13,6 +13,7 @@ from .serializers import (
     TagSerializer,
     TagFilterSerializer,
     TopicSerializer,
+    TopicFilterSerializer,
 )
 
 
@@ -153,5 +154,18 @@ class CreateTopic(generics.CreateAPIView):
     queryset = Topic.objects.all()
 
 
-class GetTopics:
-    pass
+class GetTopics(generics.ListAPIView):
+    """
+    List all topics for a specefied Subject.
+    """
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = TopicSerializer
+
+    def get_queryset(self):
+        filter_serializer = TopicFilterSerializer(data=self.request.query_params)
+        filter_serializer.is_valid(raise_exception=True)
+
+        prefix = self.request.query_params.get("title")
+        subject_id = self.request.query_params.get("subject")
+        return Topic.objects.filter(title__startswith=prefix, subject_id=subject_id)[:8]

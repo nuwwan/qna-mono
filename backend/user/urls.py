@@ -8,6 +8,7 @@ from .views import (
     CreateTag,
     GetTags,
     CreateTopic,
+    GetTopics,
 )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path("create_tag/", CreateTag.as_view(), name="create_tag"),
     path("get_tags/", GetTags.as_view(), name="get_tags"),
     path("create_topic/", CreateTopic.as_view(), name="create_topic"),
+    path("get_topics/", GetTopics.as_view(), name="get_topics"),
 ]
