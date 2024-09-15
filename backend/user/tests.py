@@ -405,3 +405,53 @@ class GetTagsTest(BaseProfileTest):
         response = self.client.get(self.url, {"title": ""})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class CreateTopic(BaseProfileTest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("create_topic")
+        super().__init__(methodName)
+
+    def test_create_topic(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create subject
+        subject = Subject.objects.create(title="Science")
+
+        payload = {"title": "Bio Science", "subject": subject.id}
+
+        response = self.client.post(self.url, payload, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_existing_topic(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create subject
+        subject = Subject.objects.create(title="Science")
+
+        title = "Bio Science"
+
+        # create topic
+        topic = Topic(title=title, subject=subject)
+        topic.save()
+
+        payload = {"title": title, "subject": subject.id}
+
+        response = self.client.post(self.url, payload, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_short_topic(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create subject
+        subject = Subject.objects.create(title="Science")
+
+        title = "B"
+
+        payload = {"title": title, "subject": subject.id}
+
+        response = self.client.post(self.url, payload, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

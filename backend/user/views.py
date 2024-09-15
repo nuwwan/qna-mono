@@ -12,6 +12,7 @@ from .serializers import (
     SubjectFilterSerializer,
     TagSerializer,
     TagFilterSerializer,
+    TopicSerializer,
 )
 
 
@@ -125,10 +126,6 @@ class CreateTag(generics.CreateAPIView):
             )
 
 
-class RemoveTag:
-    pass
-
-
 class GetTags(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -143,6 +140,18 @@ class GetTags(generics.ListAPIView):
         return Tag.objects.filter(title__startswith=prefix)[:8]
 
 
+class RemoveTag:
+    pass
+
+
 #
 # Topic Views
 #
+class CreateTopic(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TopicSerializer
+    queryset = Topic.objects.all()
+
+
+class GetTopics:
+    pass

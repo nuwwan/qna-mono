@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinLengthValidator
 
 
 class Gender(models.TextChoices):
@@ -17,7 +18,7 @@ AuthUser = get_user_model()
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=25)
+    title = models.CharField(max_length=25, unique=True)
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -33,7 +34,9 @@ class Subject(models.Model):
 
 
 class Topic(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(
+        max_length=50, unique=True, validators=[MinLengthValidator(2)]
+    )
     subject = models.ForeignKey(
         Subject, on_delete=models.CASCADE, related_name="topics"
     )
