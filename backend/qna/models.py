@@ -70,7 +70,19 @@ class PaperQuestion(models.Model):
 class QuestionAttempt(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     assignee = models.ForeignKey(AuthUser, on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"question:{self.question} assignee:{self.assignee}"
+
+
+class Review(models.Model):
+    author = models.ForeignKey(
+        AuthUser, on_delete=models.CASCADE, related_name="reviews"
+    )
+    description = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return self.description
