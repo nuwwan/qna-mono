@@ -30,7 +30,7 @@ class BaseQnATest(APITestCase):
         return super().setUp()
 
 
-class CreateQuestion(BaseQnATest):
+class CreateQuestionTest(BaseQnATest):
     def __init__(self, methodName: str = "runTest") -> None:
         self.url = reverse("create_question")
         super().__init__(methodName)
@@ -65,3 +65,22 @@ class CreateQuestion(BaseQnATest):
 
         response = self.client.post(self.url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetUserQuestionsTest(BaseQnATest):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.url = reverse("get_user_questions")
+        super().__init__(methodName)
+
+    def test_get_user_questions(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        response = self.client.get(self.url, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data, list)
+
+    def test_get_questions_for_unauthenticated_users(self):
+        response = self.client.get(self.url, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

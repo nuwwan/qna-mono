@@ -14,7 +14,7 @@ from .models import Question
 
 # Create Question
 class CreateQuestion(generics.CreateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
 
@@ -38,7 +38,16 @@ class RemoveQuestion:
 
 
 # Get User Questions
-class GetUserQuestions:
+class GetUserQuestions(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = QuestionSerializer
+
+    def get_queryset(self):
+        return Question.objects.filter(author=self.request.user)
+
+
+# Get questions for the some tags
+class GetTagsQuestions(generics.ListAPIView):
     pass
 
 
