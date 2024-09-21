@@ -35,6 +35,8 @@ coverage html
 
 ## API Documentation
 
+### /User
+
 | App           | Description      | Endpoint               | Method     | Payload/ Params                             |
 |---------------|------------------|------------------------|------------|---------------------------------------------|
 | Profile       |create profile    | user/create_profile/   | POST       | `{"birth_day": "1993-04-23","gender": "male","country": "Sri Lanka","educational_level": "school","tags": [1],"subjects": [],"topics": [1]}`                        |
@@ -46,3 +48,9 @@ coverage html
 |               | get tags         | user/get_tags/         | GET        | `title=something`                           |
 | Topic         | create topic     | user/create_topic/     | POST       | `{"title":"Geography","Subject":1}`         |
 |               | get topics       | user/get_topics/       | GET        | `title=something&subject=1`                 |
+
+### /QnA
+
+| App           | Description      | Endpoint               | Method     | Payload/ Params                             |
+|---------------|------------------|------------------------|------------|---------------------------------------------|
+| Question      | create question  | qna/create_question/   | POST       |  |

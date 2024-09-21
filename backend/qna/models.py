@@ -34,12 +34,15 @@ class QuestionTag(models.Model):
     tag = models.ForeignKey(Tag, models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ("question", "tag")
+
 
 class Answer(models.Model):
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, related_name="answers"
     )
-    title = models.CharField(max_length=1000)
+    title = models.TextField()
     image = models.CharField(max_length=1000, null=True)
     is_correct_answer = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -83,6 +86,7 @@ class Review(models.Model):
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return self.description
