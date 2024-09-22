@@ -29,11 +29,6 @@ class UpdateQuestion(generics.UpdateAPIView):
     queryset = Question.objects.all()
 
 
-# Update answer
-class UpdateAnswer:
-    pass
-
-
 # Remove Question
 class RemoveQuestion:
     pass

@@ -7,6 +7,7 @@ from rest_framework import status
 from authentication.utils import generate_jwt_token
 from .models import DifficultyLevels
 from user.models import Tag
+from .models import Question, QuestionTag, Answer
 
 AuthUser = get_user_model()
 
@@ -84,3 +85,39 @@ class GetUserQuestionsTest(BaseQnATest):
         response = self.client.get(self.url, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class UpdateUserQuestions(BaseQnATest):
+    def test_update_question(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create question
+        question = Question.objects.create(
+            title="test",
+            difficulty_level=DifficultyLevels.EASY,
+            explanation="sample explanation",
+            author=self.user,
+        )
+        self.tag1.save()
+        self.tag2.save()
+        QuestionTag.objects.create(question=question, tag=self.tag1)
+        QuestionTag.objects.create(question=question, tag=self.tag2)
+        Answer.objects.create(question=question, title="answer 1")
+        Answer.objects.create(question=question, title="answer 2")
+
+        # format url
+        self.url = reverse("update_question", kwargs={"pk": question.id})
+
+        updated_name = "Test-edited"
+
+        payload = {
+            "title": updated_name,
+            "difficulty_level": DifficultyLevels.EASY,
+            "tags": [{"title": self.tag1.title}, {"title": self.tag2.title}],
+            "explanation": "sample explanation",
+            "answers": [{"title": "Answer 1"}, {"title": "Answer 2"}],
+        }
+
+        response = self.client.put(self.url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("title"), updated_name)
