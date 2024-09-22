@@ -21,7 +21,7 @@
             "request": "launch",
             "args": [
                 "test",
-                "qna.tests.CreateQuestion"
+                "qna.tests.UpdateUserQuestions"
             ],
             "env": {"DJANGO_SETTINGS_MODULE":"backend.settings"},
             "django": true,
