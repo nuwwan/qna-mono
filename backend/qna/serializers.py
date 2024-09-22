@@ -47,3 +47,29 @@ class QuestionSerializer(serializers.ModelSerializer):
             Answer.objects.create(question=question, **answer)
 
         return question
+
+    def update(self, instance, validated_data):
+        answers_data = validated_data.pop("answers")
+        tags_data = validated_data.pop("tags")
+
+        # Update the question title
+        instance.title = validated_data.get("title", instance.title)
+        instance.image = validated_data.get("image", instance.image)
+        instance.difficulty_level = validated_data.get(
+            "difficulty_level", instance.difficulty_level
+        )
+        instance.save()
+
+        # Update tags
+        instance.tags.clear()  # Remove existing tags
+        for tag_data in tags_data:
+            tag, created = Tag.objects.get_or_create(title=tag_data["title"])
+            QuestionTag.objects.get_or_create(
+                question=instance, tag=tag
+            )  # Ensure relation exists
+
+        # Update answers
+        instance.answers.all().delete()  # Remove all existing answers for simplicity
+        for answer_data in answers_data:
+            Answer.objects.create(question=instance, **answer_data)
+        return instance

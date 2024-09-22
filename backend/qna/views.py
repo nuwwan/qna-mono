@@ -23,8 +23,10 @@ class CreateQuestion(generics.CreateAPIView):
 
 
 # Update Question
-class UpdateQuestion:
-    pass
+class UpdateQuestion(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = QuestionSerializer
+    queryset = Question.objects.all()
 
 
 # Update answer
