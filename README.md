@@ -51,6 +51,9 @@ coverage html
 
 ### /QnA
 
-| App           | Description      | Endpoint               | Method     | Payload/ Params                             |
-|---------------|------------------|------------------------|------------|---------------------------------------------|
-| Question      | create question  | qna/create_question/   | POST       |  |
+| App           | Description        | Endpoint               | Method     | Payload/ Params                             |
+|---------------|--------------------|------------------------|------------|---------------------------------------------|
+| Question      | create question    | qna/create_question/   | POST       |  `{"title": "Test Title","difficulty_level": "Easy","tags": [{"title": self.tag1.title}, {"title": self.tag2.title}],"explanation": "sample explanation","answers": [{"title": "Answer 1"}, {"title": "Answer 2"}],}`                                                                        |
+|               | update question    | qna/update_question/1/ | PUT/PATCH  | `{"title": "Test Title","difficulty_level": "Easy","tags": [{"title": self.tag1.title}, {"title": self.tag2.title}],"explanation": "sample explanation","answers": [{"title": "Answer 1"}, {"title": "Answer 2"}],}`                                                                                   |
+|               | get user questions | qna/get_user_questions/| GET        |                                             |
+|               | remove question    | qna/remove_question/2/ | DELETE     |                                             |

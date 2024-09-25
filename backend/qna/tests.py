@@ -121,3 +121,39 @@ class UpdateUserQuestions(BaseQnATest):
         response = self.client.put(self.url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("title"), updated_name)
+
+
+class DeleteQuestions(BaseQnATest):
+    def test_delete_question(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        # create question
+        question = Question.objects.create(
+            title="test",
+            difficulty_level=DifficultyLevels.EASY,
+            explanation="sample explanation",
+            author=self.user,
+        )
+        self.tag1.save()
+        self.tag2.save()
+        QuestionTag.objects.create(question=question, tag=self.tag1)
+        QuestionTag.objects.create(question=question, tag=self.tag2)
+        Answer.objects.create(question=question, title="answer 1")
+        Answer.objects.create(question=question, title="answer 2")
+
+        # format url
+        self.url = reverse("delete_question", kwargs={"pk": question.id})
+
+        response = self.client.delete(self.url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_if_question_does_not_exist(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token)
+
+        non_exist_question_id = 1234
+
+        # format url
+        self.url = reverse("delete_question", kwargs={"pk": non_exist_question_id})
+
+        response = self.client.delete(self.url, format="json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
