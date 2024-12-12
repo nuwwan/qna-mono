@@ -14,7 +14,7 @@ class DifficultyLevels(models.IntegerChoices):
 
 class Question(models.Model):
     title = models.TextField(null=False)
-    image = models.CharField(max_length=1000, null=True)
+    image = models.CharField(max_length=1000, null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         AuthUser, on_delete=models.CASCADE, related_name="questions"
@@ -23,7 +23,7 @@ class Question(models.Model):
         choices=DifficultyLevels, default=DifficultyLevels.EASY
     )
     tags = models.ManyToManyField(Tag, through="QuestionTag")
-    explanation = models.TextField()
+    explanation = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.title
