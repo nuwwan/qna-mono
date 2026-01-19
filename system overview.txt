@@ -1,0 +1,40 @@
+Q&A App
+Introduction
+QnA App is an interactive MCQ-based question platform designed to help users continuously refresh and stay up to date with subjects and domains they subscribe to.
+The platform focuses on making learning engaging, lightweight, and habit-forming through short quizzes, progress tracking, and interactive feedback.
+Users
+Admin : Manages the overall platform, users, content moderation, and system configuration.
+Author : Creates, edits, and maintains MCQ questions and subject content. Author has rights to review answers and vote them. Authors can add answers/explantions to the questions 
+        created by other authors.
+Learner : Answers questions, subscribes to subjects, tracks progress, and improves knowledge through regular practice.
+
+Usecases
+1. Basic jwt authentication features should be there
+    - User Signup.(First name, Last Name, Email, Password)
+    - User signin. (Email and Password)
+    - User Signout.
+    - Password Reset.
+    - Google Signin.
+    - Verify User email.
+
+2. Create Questions.
+Author can cretae questions. Answers also needed to be created at the same time and explantion also needed to be created same time. The answer can be changed in future 
+after carefully reviewing by other users. This is based on the like and dislike for each answer. But the answer provided by the author will be trated as the defaut answer.
+
+3. Application will suggests these questions for the Learners if subscribed to the perticular subject. Leaners can answer the MCQ question by selecting an answer. 
+Correct answers will be revealed along with the explanation once learner commit his answer.
+
+4. Subjects will be Entites in different expertise areas(Ex: Programming, chemistry)
+
+5. Tags will be used match the question and user subscriptions. Users can subscribe for different tags(ex: python, English, Geometry, Linear motion etc).Tag may 
+relevent to subjects(python->programming,IT). Questions also have tags associated with it. 
+
+6. Questions will have quantitative criteria like difficulty level(), Rating, and more(Suggest more)
+
+7. Authors also will get ratings and reviews. Rating will be in two forms, one will be based from the quality of the questions they make. second will be overhaul rating.
+
+8. question attempts will be saved too.(learner+question+date)
+
+9. Learners will get scores based on the answers they provide. Each subject/tag will be scored for a learner based on the correct answers they provide.
+
+10. MCQ question papers also will be constructed from these MCQ question. this will be a future usecase.
